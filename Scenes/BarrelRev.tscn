@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://behmsw1qh65os"]
+
+[ext_resource type="Script" uid="uid://dbd1nrehfdy77" path="res://Scenes/barrel_rev.gd" id="1_i4jvl"]
+[ext_resource type="Texture2D" uid="uid://1kcr0nq0odqj" path="res://Assets/Sprites/Barril/Barril - 1.png" id="2_nf1rv"]
+[ext_resource type="Texture2D" uid="uid://cy0b10wxieub6" path="res://Assets/Sprites/Barril Peças/Barril - Layer 2.png" id="3_0n7gi"]
+[ext_resource type="Texture2D" uid="uid://dl1xxrbwvbdfj" path="res://Assets/Sprites/Barril Peças/Barril - Layer 3.png" id="4_vkmka"]
+[ext_resource type="Texture2D" uid="uid://cgewvlhmc3ccm" path="res://Assets/Sprites/Barril Peças/Barril - Layer 4.png" id="5_0ai7l"]
+[ext_resource type="Texture2D" uid="uid://crd6ffuokxup3" path="res://Assets/Sprites/Barril Peças/Barril - Layer 5.png" id="6_06mwe"]
+[ext_resource type="Texture2D" uid="uid://gwior4xuaeyy" path="res://Assets/Sprites/Barril Peças/Barril - Layer 1.png" id="7_kqbww"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_i4jvl"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+
+[node name="BarrelRev" type="Node2D" unique_id=355722934]
+position = Vector2(65, 64)
+script = ExtResource("1_i4jvl")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1147911508]
+texture = ExtResource("2_nf1rv")
+
+[node name="Pieces" type="Node2D" parent="." unique_id=289683631]
+visible = false
+
+[node name="Topo" type="Sprite2D" parent="Pieces" unique_id=387601497]
+texture = ExtResource("3_0n7gi")
+
+[node name="Esquerda" type="Sprite2D" parent="Pieces" unique_id=444887564]
+texture = ExtResource("4_vkmka")
+
+[node name="Meio" type="Sprite2D" parent="Pieces" unique_id=1779619707]
+texture = ExtResource("5_0ai7l")
+
+[node name="Direita" type="Sprite2D" parent="Pieces" unique_id=1248875345]
+texture = ExtResource("6_06mwe")
+
+[node name="Fundo" type="Sprite2D" parent="Pieces" unique_id=1822418842]
+texture = ExtResource("7_kqbww")
+
+[node name="WoodParticles" type="GPUParticles2D" parent="." unique_id=1036594482]
+emitting = false
+amount = 30
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_i4jvl")
+
+[node name="Sprite2D" type="Sprite2D" parent="WoodParticles" unique_id=205202435]
+
+[node name="FlashTimer" type="Timer" parent="." unique_id=38394039]
