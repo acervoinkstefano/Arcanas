@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://cai4l3w3q0xp"]
+
+[ext_resource type="Texture2D" uid="uid://c71myun8l44yi" path="res://Assets/Sprites/Barril/Barril - 7.png" id="1_0cukp"]
+[ext_resource type="Texture2D" uid="uid://b62cu4hq07jap" path="res://Assets/Sprites/Barril/Barril - 2.png" id="2_qpb77"]
+[ext_resource type="Texture2D" uid="uid://lmrex51xq058" path="res://Assets/Sprites/Barril/Barril - 3.png" id="3_mwc37"]
+[ext_resource type="Texture2D" uid="uid://bb11murw0b6m1" path="res://Assets/Sprites/Barril/Barril - 4.png" id="4_4ppf4"]
+[ext_resource type="Texture2D" uid="uid://r0mb0664f1ir" path="res://Assets/Sprites/Barril/Barril - 5.png" id="5_3suhj"]
+[ext_resource type="Texture2D" uid="uid://t4auavmi7fxv" path="res://Assets/Sprites/Barril/Barril - 6.png" id="6_0h8bn"]
+[ext_resource type="Texture2D" uid="uid://1kcr0nq0odqj" path="res://Assets/Sprites/Barril/Barril - 1.png" id="7_ntgkd"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_metyy"]
+radius = 24.0
+height = 67.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g5g07"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0cukp")
+}],
+"loop": true,
+"name": &"Broken",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.5,
+"texture": ExtResource("2_qpb77")
+}, {
+"duration": 0.5,
+"texture": ExtResource("3_mwc37")
+}, {
+"duration": 0.5,
+"texture": ExtResource("4_4ppf4")
+}, {
+"duration": 0.5,
+"texture": ExtResource("5_3suhj")
+}, {
+"duration": 0.5,
+"texture": ExtResource("6_0h8bn")
+}, {
+"duration": 0.5,
+"texture": ExtResource("1_0cukp")
+}, {
+"duration": 0.5,
+"texture": ExtResource("6_0h8bn")
+}, {
+"duration": 0.5,
+"texture": ExtResource("1_0cukp")
+}],
+"loop": true,
+"name": &"Hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_ntgkd")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[node name="Barrel" type="StaticBody2D" unique_id=217971589]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1219185691]
+position = Vector2(0, 31.5)
+shape = SubResource("CapsuleShape2D_metyy")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=521847675]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1497532655]
+position = Vector2(0, 31.5)
+shape = SubResource("CapsuleShape2D_metyy")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1430369218]
+sprite_frames = SubResource("SpriteFrames_g5g07")
+animation = &"Broken"
+frame_progress = 0.023132892
