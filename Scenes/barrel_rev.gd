@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var barrel_scene: PackedScene = preload("res://Scenes/Barrel.tscn")
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var pieces: Node2D = $Pieces
 @onready var particles: GPUParticles2D = $WoodParticles
@@ -26,9 +27,14 @@ func _ready() -> void:
 			
 
 func _process(_delta: float) -> void:
-	
+	if broken == false:
+		var direction := get_input_direction()
+		if direction != Vector2.ZERO:
+			break_barrel(direction.normalized(), 1)
 
-	
+	if Input.is_key_pressed(KEY_SPACE):
+		regenerate()
+
 	if broken:
 		return
 	var direction := get_input_direction()
@@ -116,3 +122,9 @@ func _on_flash_timeout() -> void:
 				piece.queue_free()
 
 		particles.emitting = false
+
+func regenerate() -> void:
+	var new_barrel = barrel_scene.instantiate()
+	new_barrel.global_position = global_position
+	get_parent().add_child(new_barrel)
+	queue_free()
