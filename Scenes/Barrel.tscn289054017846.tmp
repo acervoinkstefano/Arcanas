@@ -33,6 +33,7 @@ size = Vector2(44, 60)
 [node name="BarrelRev" type="Node2D" unique_id=355722934]
 position = Vector2(65, 64)
 script = ExtResource("1_i4jvl")
+barrel_scene = null
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1147911508]
 texture = ExtResource("2_nf1rv")
