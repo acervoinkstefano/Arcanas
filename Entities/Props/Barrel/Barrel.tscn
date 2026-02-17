@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://behmsw1qh65os"]
 
-[ext_resource type="Script" uid="uid://dbd1nrehfdy77" path="res://Scenes/barrel_rev.gd" id="1_i4jvl"]
+[ext_resource type="Script" uid="uid://dbd1nrehfdy77" path="res://Entities/Props/Barrel/barrel_rev.gd" id="1_i4jvl"]
 [ext_resource type="Texture2D" uid="uid://1kcr0nq0odqj" path="res://Assets/Sprites/Barril/Barril - 1.png" id="2_nf1rv"]
 [ext_resource type="Texture2D" uid="uid://cy0b10wxieub6" path="res://Assets/Sprites/Barril Peças/Barril - Layer 2.png" id="3_0n7gi"]
 [ext_resource type="Texture2D" uid="uid://dl1xxrbwvbdfj" path="res://Assets/Sprites/Barril Peças/Barril - Layer 3.png" id="4_vkmka"]
@@ -40,7 +40,7 @@ texture = ExtResource("2_nf1rv")
 [node name="Pieces" type="Node2D" parent="." unique_id=289683631]
 
 [node name="Piece_1" type="RigidBody2D" parent="Pieces" unique_id=2028912528]
-mass = 3.116
+mass = 2.176
 freeze = true
 
 [node name="Topo" type="Sprite2D" parent="Pieces/Piece_1" unique_id=387601497]
@@ -51,7 +51,7 @@ position = Vector2(0, 11)
 shape = SubResource("RectangleShape2D_nf1rv")
 
 [node name="Piece_2" type="RigidBody2D" parent="Pieces" unique_id=650815445]
-mass = 0.699
+mass = 0.62
 freeze = true
 
 [node name="Esquerda" type="Sprite2D" parent="Pieces/Piece_2" unique_id=444887564]
@@ -62,7 +62,7 @@ position = Vector2(-15, 35)
 shape = SubResource("RectangleShape2D_i4jvl")
 
 [node name="Piece_3" type="RigidBody2D" parent="Pieces" unique_id=1794416129]
-mass = 0.55
+mass = 0.488
 freeze = true
 
 [node name="Meio" type="Sprite2D" parent="Pieces/Piece_3" unique_id=1779619707]
@@ -73,7 +73,7 @@ position = Vector2(-5, 31)
 shape = SubResource("RectangleShape2D_0n7gi")
 
 [node name="Piece_4" type="RigidBody2D" parent="Pieces" unique_id=2054809061]
-mass = 1.432
+mass = 0.942
 freeze = true
 
 [node name="Direita" type="Sprite2D" parent="Pieces/Piece_4" unique_id=1248875345]
@@ -84,7 +84,7 @@ position = Vector2(5, 31.625)
 shape = SubResource("RectangleShape2D_vkmka")
 
 [node name="Piece_Base" type="RigidBody2D" parent="Pieces" unique_id=1735485059]
-mass = 2.935
+mass = 1.062
 freeze = true
 
 [node name="Fundo" type="Sprite2D" parent="Pieces/Piece_Base" unique_id=1822418842]

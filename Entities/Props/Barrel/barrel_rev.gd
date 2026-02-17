@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var barrel_scene: PackedScene = preload("res://Scenes/Barrel.tscn")
+@onready var barrel_scene: PackedScene = preload("res://Entities/Props/Barrel/Barrel.tscn")
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var pieces: Node2D = $Pieces
 @onready var particles: GPUParticles2D = $WoodParticles
