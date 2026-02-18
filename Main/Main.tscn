@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://behmsw1qh65os" path="res://Entities/Props/Barrel/Barrel.tscn" id="2_amygn"]
 [ext_resource type="PackedScene" uid="uid://sbaijyrtjt8h" path="res://Entities/Props/SoulCrate/SoulCrate.tscn" id="3_amygn"]
 [ext_resource type="Script" uid="uid://b305tuw2vw3f4" path="res://Main/Hittestrig.gd" id="3_ps1la"]
+[ext_resource type="PackedScene" uid="uid://c0s3tgp5htguj" path="res://Entities/Props/Box/box.tscn" id="5_6aewd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rgh2o"]
 size = Vector2(657, 20)
@@ -52,3 +53,6 @@ offset_bottom = 107.0
 
 [node name="SoulCrate" parent="." unique_id=1172341256 instance=ExtResource("3_amygn")]
 position = Vector2(510, 143)
+
+[node name="Box2" parent="." unique_id=1342213207 instance=ExtResource("5_6aewd")]
+position = Vector2(635, 159)

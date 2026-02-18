@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://c0s3tgp5htguj"]
+
+[ext_resource type="Script" uid="uid://dxbuvagacugc0" path="res://box.gd" id="1_qoqbc"]
+[ext_resource type="Texture2D" uid="uid://qlt3pstc7dkp" path="res://Assets/Sprites/Box/Box - Layer 7.png" id="2_wco6n"]
+[ext_resource type="Texture2D" uid="uid://b8k0wtgdknwh8" path="res://Assets/Sprites/Box/Box - Layer 8.png" id="3_y8lwa"]
+[ext_resource type="Texture2D" uid="uid://brhi38qtyltfc" path="res://Assets/Sprites/Box/Box - Layer 1.png" id="4_fc4e8"]
+[ext_resource type="Texture2D" uid="uid://coy2tl51o2a" path="res://Assets/Sprites/Box/Box - Layer 2.png" id="5_t0bae"]
+[ext_resource type="Texture2D" uid="uid://dpy3spe5mjf2h" path="res://Assets/Sprites/Box/Box - Layer 3.png" id="6_3u5ou"]
+[ext_resource type="Texture2D" uid="uid://keao263vsqen" path="res://Assets/Sprites/Box/Box - Layer 4.png" id="7_ck5ti"]
+[ext_resource type="Texture2D" uid="uid://drfqo76dpxmyo" path="res://Assets/Sprites/Box/Box - Layer 5.png" id="8_sp2yk"]
+[ext_resource type="Texture2D" uid="uid://c0g4xkri4e1h3" path="res://Assets/Sprites/Box/Box - Layer 6.png" id="9_sundq"]
+
+[node name="Box" type="Node2D" unique_id=1342213207]
+script = ExtResource("1_qoqbc")
+
+[node name="Fundo1" type="Sprite2D" parent="." unique_id=241113970]
+texture = ExtResource("2_wco6n")
+
+[node name="Fundo2" type="Sprite2D" parent="." unique_id=1453803865]
+texture = ExtResource("3_y8lwa")
+
+[node name="Fundo" type="Sprite2D" parent="." unique_id=104446056]
+texture = ExtResource("4_fc4e8")
+
+[node name="Topo" type="Sprite2D" parent="." unique_id=187752491]
+texture = ExtResource("5_t0bae")
+
+[node name="Lateral" type="Sprite2D" parent="." unique_id=821579497]
+texture = ExtResource("6_3u5ou")
+
+[node name="Frente1" type="Sprite2D" parent="." unique_id=683193087]
+texture = ExtResource("7_ck5ti")
+
+[node name="Frente2" type="Sprite2D" parent="." unique_id=157066717]
+texture = ExtResource("8_sp2yk")
+
+[node name="Frente3" type="Sprite2D" parent="." unique_id=1434127712]
+texture = ExtResource("9_sundq")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=908350909]
