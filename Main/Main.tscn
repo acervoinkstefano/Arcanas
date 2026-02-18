@@ -39,12 +39,16 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="LabelDir" type="Label" parent="HitTestRig/UI" unique_id=687093996]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 1.0
+offset_top = 37.0
+offset_right = 41.0
+offset_bottom = 60.0
 
 [node name="LabelHint" type="Label" parent="HitTestRig/UI" unique_id=124141084]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 2.0
+offset_top = 84.0
+offset_right = 42.0
+offset_bottom = 107.0
 
 [node name="SoulCrate" parent="." unique_id=1172341256 instance=ExtResource("3_amygn")]
 position = Vector2(510, 143)

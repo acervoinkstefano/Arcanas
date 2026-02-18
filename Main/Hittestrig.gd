@@ -5,7 +5,8 @@ extends Node2D
 # ─────────────────────────────────────────────
 # REFERÊNCIAS — ALMA
 # ─────────────────────────────────────────────
-@onready var soul_controller: Node2D = $"../SoulCrate"
+@onready var soul_root: Node2D = $"../SoulCrate"
+var soul_controller: Node2D = null
 var soul_damage_handler: Area2D = null
 
 # ─────────────────────────────────────────────
@@ -57,8 +58,8 @@ const STATE_NAMES := {
 	0: "HEAD_BURIED",
 	1: "GROWING",
 	2: "FULL_IDLE",
-	3: "HEAD_SEPARATED",
-	4: "SLIME_MOVING",
+	3: "HEADLESS_IDLE",
+	4: "BODYLESS_IDLE",
 	5: "DEAD",
 }
 
@@ -66,31 +67,36 @@ const STATE_NAMES := {
 # READY
 # ─────────────────────────────────────────────
 func _ready() -> void:
-	# Pequeno delay para garantir que todos os scripts foram compilados e carregados
 	await get_tree().process_frame
-	
-	if is_instance_valid(soul_controller):
-		for child in soul_controller.get_children():
-			if child is Area2D:
-				soul_damage_handler = child
-				break
-		
-		_origin = soul_controller.global_position
-		
-		# Conexão segura de sinal
-		if soul_controller.has_signal("state_changed"):
-			soul_controller.state_changed.connect(_on_state_changed)
-		
-		_update_ui("Nenhum", soul_controller.get("state"))
-
+	_origin = soul_root.global_position
+	_connect_soul(soul_root)
 	_barrel_ref = barrel_root
 
 	label_hint.text = (
 		"[WASD + combinações] → Golpe nos dois alvos\n"
-		+ "[SPACE] → Reset alma (FULL_IDLE)\n"
+		+ "[SPACE] → Regenera alma\n"
+		+ "[SHIFT] → Crescer\n"
 		+ "[R]     → Regenera barril\n"
 		+ "[TAB]   → Força próximo estado da alma"
 	)
+
+# ─────────────────────────────────────────────
+# CONEXÃO COM A ALMA ATUAL
+# ─────────────────────────────────────────────
+func _connect_soul(target: Node2D) -> void:
+	soul_controller      = target
+	soul_damage_handler  = null
+
+	for child in soul_controller.get_children():
+		if child is Area2D:
+			soul_damage_handler = child
+			break
+
+	if soul_controller.has_signal("state_changed"):
+		if not soul_controller.state_changed.is_connected(_on_state_changed):
+			soul_controller.state_changed.connect(_on_state_changed)
+
+	_update_ui("Nenhum", soul_controller.get("state"))
 
 # ─────────────────────────────────────────────
 # INPUT
@@ -101,7 +107,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	match event.keycode:
 		KEY_SPACE:
-			_reset_soul()
+			_regenerate_soul()
 			return
 		KEY_R:
 			_regenerate_barrel()
@@ -135,6 +141,9 @@ func _read_wasd_combo() -> String:
 	if right: return "D"
 	return ""
 
+# ─────────────────────────────────────────────
+# GOLPE
+# ─────────────────────────────────────────────
 func _send_hit(direction: Vector2, combo: String) -> void:
 	if is_instance_valid(soul_controller) and soul_damage_handler != null:
 		soul_damage_handler.receive_hit(direction)
@@ -149,18 +158,33 @@ func _send_hit(direction: Vector2, combo: String) -> void:
 
 	_cooldown_timer = HIT_COOLDOWN
 
-func _reset_soul() -> void:
+# ─────────────────────────────────────────────
+# REGENERAR ALMA
+# ─────────────────────────────────────────────
+func _regenerate_soul() -> void:
 	if not is_instance_valid(soul_controller): return
-	var head: RigidBody2D = soul_controller.get_node("Head")
-	head.freeze           = true
-	head.linear_velocity  = Vector2.ZERO
-	head.angular_velocity = 0.0
-	head.position         = Vector2(0, -50)
-	head.rotation         = 0.0
-	soul_controller.global_position = _origin
-	soul_controller.set_state(soul_controller.State.FULL_IDLE)
-	_update_ui("REINÍCIO", soul_controller.get("state"))
 
+	# Pede para a alma se instanciar e se destruir
+	soul_controller.regenerate()
+	soul_controller      = null
+	soul_damage_handler  = null
+
+	# Aguarda dois frames: um para queue_free processar, outro para _ready da nova rodar
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	# Encontra a nova instância — tem apply_hit e não é o soul_root destruído
+	for child in get_parent().get_children():
+		if child.has_method("apply_hit") and is_instance_valid(child):
+			_connect_soul(child)
+			_update_ui("REGENERADA", child.get("state"))
+			return
+
+	push_error("HitTestRig: nova instância de SoulCrate não encontrada após regenerate()")
+
+# ─────────────────────────────────────────────
+# REGENERAR BARRIL
+# ─────────────────────────────────────────────
 func _regenerate_barrel() -> void:
 	if is_instance_valid(_barrel_ref) and _barrel_ref.has_method("regenerate"):
 		_barrel_ref.regenerate()
@@ -170,16 +194,35 @@ func _regenerate_barrel() -> void:
 				_barrel_ref = child
 				break
 
+# ─────────────────────────────────────────────
+# FORÇAR PRÓXIMO ESTADO
+# ─────────────────────────────────────────────
 func _force_next_state() -> void:
-	if is_instance_valid(soul_controller):
-		var current: int = soul_controller.get("state")
-		var next: int    = (current + 1) % soul_controller.State.size()
-		soul_controller.set_state(next)
+	if not is_instance_valid(soul_controller): return
+	var current: int = soul_controller.get("state")
+	var next: int    = (current + 1) % soul_controller.State.size()
+	# Reseta física antes de forçar estado
+	var head: RigidBody2D = soul_controller.get_node("Head")
+	head.freeze           = true
+	head.linear_velocity  = Vector2.ZERO
+	head.angular_velocity = 0.0
+	head.position         = Vector2(0, -50)
+	head.rotation         = 0.0
+	soul_controller.get_node("Body").position = Vector2.ZERO
+	soul_controller.get_node("Body").scale    = Vector2.ONE
+	soul_controller.global_position           = _origin
+	soul_controller.set_state(next)
 
+# ─────────────────────────────────────────────
+# PROCESS
+# ─────────────────────────────────────────────
 func _process(delta: float) -> void:
 	if _cooldown_timer > 0.0:
 		_cooldown_timer -= delta
 
+# ─────────────────────────────────────────────
+# CALLBACKS
+# ─────────────────────────────────────────────
 func _on_state_changed(new_state: int) -> void:
 	if is_instance_valid(soul_controller):
 		_update_ui(label_dir.text.replace("Golpe:  ", ""), new_state)

@@ -24,8 +24,8 @@
 [ext_resource type="Texture2D" uid="uid://sy8qlo76b2g4" path="res://Assets/Sprites/Efígie (SoulCrate)/Efígie - 15.png" id="22_v24uw"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u5kov"]
-radius = 13.0
-height = 40.0
+radius = 12.0
+height = 32.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_21e52"]
 radius = 20.0
@@ -87,26 +87,14 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Body:scale")
+tracks/4/path = NodePath("HurtBox/CollisionShape2D:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Body:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_t4ka3"]
@@ -124,6 +112,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("4_t4ka3"), ExtResource("7_r5f8w"), ExtResource("8_xmc1p"), ExtResource("7_r5f8w")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HurtBox/CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_21e52"]
@@ -145,7 +145,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_h5h8w"]
 resource_name = "grow"
-length = 0.6666667
+length = 0.7
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -157,42 +157,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("9_kt4jl"), ExtResource("10_b2w2i"), ExtResource("11_o2w0t"), ExtResource("12_v24uw"), ExtResource("13_n0w2s"), ExtResource("14_qqxe4"), ExtResource("15_ffacx")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Body:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Head:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 0,
-"values": []
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Body:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_jhl1j"]
@@ -239,18 +203,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [ExtResource("3_xd4cc"), ExtResource("22_v24uw")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Head/Sprite2D:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_mslpj")]
 }
 
 [sub_resource type="Animation" id="Animation_mil83"]
@@ -301,12 +253,14 @@ position = Vector2(-28, 8)
 texture = ExtResource("2_mslpj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Head" unique_id=1051617879]
-position = Vector2(4, 9)
+position = Vector2(5, 62)
 shape = SubResource("CapsuleShape2D_u5kov")
 
 [node name="Body" type="CharacterBody2D" parent="." unique_id=61641]
+visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Body" unique_id=1844751829]
+visible = false
 position = Vector2(-32, 9)
 texture = ExtResource("3_xd4cc")
 
@@ -315,6 +269,7 @@ position = Vector2(2, 32)
 shape = SubResource("CapsuleShape2D_21e52")
 
 [node name="Slime" type="CharacterBody2D" parent="." unique_id=1379481969]
+visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Slime" unique_id=1706486424]
 position = Vector2(-32, 9)
@@ -335,7 +290,6 @@ script = ExtResource("7_t4ka3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=1890688615]
 shape = SubResource("CircleShape2D_h5h8w")
-disabled = true
 
 [node name="BloodParticles" type="GPUParticles2D" parent="." unique_id=1951423395]
 emitting = false
