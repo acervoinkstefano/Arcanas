@@ -1,5 +1,3 @@
-# HitTestRig.gd
-# Attach to: HitTestRig (Node2D) — nó na raiz da cena de teste
 extends Node2D
 
 # ─────────────────────────────────────────────
@@ -14,6 +12,12 @@ var soul_damage_handler: Area2D = null
 # ─────────────────────────────────────────────
 @onready var barrel_root: Node2D = $"../BarrelRev"
 var _barrel_ref: Node2D = null
+
+# ─────────────────────────────────────────────
+# REFERÊNCIAS — CAIXA
+# ─────────────────────────────────────────────
+@onready var box_root: Node2D = $"../Box"
+var _box_ref: Node2D = null
 
 # ─────────────────────────────────────────────
 # UI
@@ -68,15 +72,17 @@ const STATE_NAMES := {
 # ─────────────────────────────────────────────
 func _ready() -> void:
 	await get_tree().process_frame
-	_origin = soul_root.global_position
+	_origin     = soul_root.global_position
 	_connect_soul(soul_root)
 	_barrel_ref = barrel_root
+	_box_ref    = box_root
 
 	label_hint.text = (
-		"[WASD + combinações] → Golpe nos dois alvos\n"
-		+ "[SPACE] → Regenera alma\n"
+		"[WASD + combinações] → Golpe nos alvos\n"
+		+ "[SPACE] → Regenera tudo\n"
 		+ "[SHIFT] → Crescer\n"
 		+ "[R]     → Regenera barril\n"
+		+ "[E]     → Regenera caixa\n"
 		+ "[TAB]   → Força próximo estado da alma"
 	)
 
@@ -84,8 +90,8 @@ func _ready() -> void:
 # CONEXÃO COM A ALMA ATUAL
 # ─────────────────────────────────────────────
 func _connect_soul(target: Node2D) -> void:
-	soul_controller      = target
-	soul_damage_handler  = null
+	soul_controller     = target
+	soul_damage_handler = null
 
 	for child in soul_controller.get_children():
 		if child is Area2D:
@@ -107,10 +113,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	match event.keycode:
 		KEY_SPACE:
-			_regenerate_soul()
+			_regenerate_all()
 			return
 		KEY_R:
 			_regenerate_barrel()
+			return
+		KEY_E:
+			_regenerate_box()
 			return
 		KEY_TAB:
 			_force_next_state()
@@ -156,7 +165,19 @@ func _send_hit(direction: Vector2, combo: String) -> void:
 		if not _barrel_ref.broken:
 			_barrel_ref.break_barrel(direction, 1)
 
+	if is_instance_valid(_box_ref) and _box_ref.has_method("break_box"):
+		if not _box_ref.broken:
+			_box_ref.break_box(direction, 1)
+
 	_cooldown_timer = HIT_COOLDOWN
+
+# ─────────────────────────────────────────────
+# REGENERAR TUDO (SPACE)
+# ─────────────────────────────────────────────
+func _regenerate_all() -> void:
+	await _regenerate_soul()
+	await _regenerate_barrel()
+	await _regenerate_box()
 
 # ─────────────────────────────────────────────
 # REGENERAR ALMA
@@ -164,16 +185,13 @@ func _send_hit(direction: Vector2, combo: String) -> void:
 func _regenerate_soul() -> void:
 	if not is_instance_valid(soul_controller): return
 
-	# Pede para a alma se instanciar e se destruir
 	soul_controller.regenerate()
-	soul_controller      = null
-	soul_damage_handler  = null
+	soul_controller     = null
+	soul_damage_handler = null
 
-	# Aguarda dois frames: um para queue_free processar, outro para _ready da nova rodar
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	# Encontra a nova instância — tem apply_hit e não é o soul_root destruído
 	for child in get_parent().get_children():
 		if child.has_method("apply_hit") and is_instance_valid(child):
 			_connect_soul(child)
@@ -186,13 +204,35 @@ func _regenerate_soul() -> void:
 # REGENERAR BARRIL
 # ─────────────────────────────────────────────
 func _regenerate_barrel() -> void:
-	if is_instance_valid(_barrel_ref) and _barrel_ref.has_method("regenerate"):
-		_barrel_ref.regenerate()
-		await get_tree().process_frame
-		for child in barrel_root.get_parent().get_children():
-			if child != barrel_root and child.has_method("break_barrel"):
-				_barrel_ref = child
-				break
+	if not is_instance_valid(_barrel_ref): return
+	if not _barrel_ref.has_method("regenerate"): return
+
+	_barrel_ref.regenerate()
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	for child in get_parent().get_children():
+		if child != barrel_root and child.has_method("break_barrel") and is_instance_valid(child):
+			_barrel_ref = child
+			return
+
+# ─────────────────────────────────────────────
+# REGENERAR CAIXA
+# ─────────────────────────────────────────────
+func _regenerate_box() -> void:
+	if not is_instance_valid(_box_ref): return
+	if not _box_ref.has_method("regenerate"): return
+
+	_box_ref.regenerate()
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	for child in get_parent().get_children():
+		if child != box_root and child.has_method("break_box") and is_instance_valid(child):
+			_box_ref = child
+			return
 
 # ─────────────────────────────────────────────
 # FORÇAR PRÓXIMO ESTADO
@@ -201,7 +241,7 @@ func _force_next_state() -> void:
 	if not is_instance_valid(soul_controller): return
 	var current: int = soul_controller.get("state")
 	var next: int    = (current + 1) % soul_controller.State.size()
-	# Reseta física antes de forçar estado
+
 	var head: RigidBody2D = soul_controller.get_node("Head")
 	head.freeze           = true
 	head.linear_velocity  = Vector2.ZERO

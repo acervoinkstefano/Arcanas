@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://behmsw1qh65os" path="res://Entities/Props/Barrel/Barrel.tscn" id="2_amygn"]
 [ext_resource type="PackedScene" uid="uid://sbaijyrtjt8h" path="res://Entities/Props/SoulCrate/SoulCrate.tscn" id="3_amygn"]
 [ext_resource type="Script" uid="uid://b305tuw2vw3f4" path="res://Main/Hittestrig.gd" id="3_ps1la"]
-[ext_resource type="PackedScene" uid="uid://c0s3tgp5htguj" path="res://Entities/Props/Box/box.tscn" id="5_6aewd"]
+[ext_resource type="PackedScene" uid="uid://cuhcjfqmqs6r3" path="res://Entities/Props/Box/Box.tscn" id="5_6aewd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rgh2o"]
 size = Vector2(657, 20)
@@ -12,6 +12,8 @@ size = Vector2(657, 20)
 [sub_resource type="ImageTexture" id="ImageTexture_pbw6q"]
 
 [node name="MainScene" type="Node2D" unique_id=139380437]
+light_mask = 2
+visibility_layer = 2
 
 [node name="IllustrationOfHighlandLandscapesWithPixelArtDesignVector" type="Sprite2D" parent="." unique_id=401308902]
 position = Vector2(316, 163.00002)
@@ -19,8 +21,10 @@ scale = Vector2(0.7083457, 0.75208855)
 texture = ExtResource("1_83ytx")
 
 [node name="Ground" type="StaticBody2D" parent="." unique_id=1333936196]
+collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=1080872721]
+visibility_layer = 3
 position = Vector2(317.5, 228)
 shape = SubResource("RectangleShape2D_rgh2o")
 
@@ -54,5 +58,5 @@ offset_bottom = 107.0
 [node name="SoulCrate" parent="." unique_id=1172341256 instance=ExtResource("3_amygn")]
 position = Vector2(510, 143)
 
-[node name="Box2" parent="." unique_id=1342213207 instance=ExtResource("5_6aewd")]
+[node name="Box" parent="." unique_id=1342213207 instance=ExtResource("5_6aewd")]
 position = Vector2(635, 159)

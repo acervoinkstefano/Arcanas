@@ -293,6 +293,7 @@ script = ExtResource("1_n1enm")
 
 [node name="Head" type="RigidBody2D" parent="." unique_id=594320946]
 position = Vector2(1, -1)
+collision_mask = 3
 mass = 1.37
 script = ExtResource("2_xd4cc")
 

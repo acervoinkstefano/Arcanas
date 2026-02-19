@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://c0s3tgp5htguj"]
+[gd_scene format=3 uid="uid://cuhcjfqmqs6r3"]
 
-[ext_resource type="Script" uid="uid://dxbuvagacugc0" path="res://box.gd" id="1_qoqbc"]
+[ext_resource type="Script" uid="uid://dxbuvagacugc0" path="res://Entities/Props/Box/box.gd" id="1_qoqbc"]
+[ext_resource type="Texture2D" uid="uid://xsfadcq46tj" path="res://Assets/Sprites/Box/WoodPiece.png" id="2_v47vr"]
 [ext_resource type="Texture2D" uid="uid://qlt3pstc7dkp" path="res://Assets/Sprites/Box/Box - Layer 7.png" id="2_wco6n"]
 [ext_resource type="Texture2D" uid="uid://b8k0wtgdknwh8" path="res://Assets/Sprites/Box/Box - Layer 8.png" id="3_y8lwa"]
 [ext_resource type="Texture2D" uid="uid://brhi38qtyltfc" path="res://Assets/Sprites/Box/Box - Layer 1.png" id="4_fc4e8"]
@@ -10,31 +11,81 @@
 [ext_resource type="Texture2D" uid="uid://drfqo76dpxmyo" path="res://Assets/Sprites/Box/Box - Layer 5.png" id="8_sp2yk"]
 [ext_resource type="Texture2D" uid="uid://c0g4xkri4e1h3" path="res://Assets/Sprites/Box/Box - Layer 6.png" id="9_sundq"]
 
-[node name="Box" type="Node2D" unique_id=1342213207]
+[sub_resource type="Curve" id="Curve_wlfoa"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nnmq4"]
+curve = SubResource("Curve_wlfoa")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wco6n"]
+particle_flag_disable_z = true
+initial_velocity_min = 200.0
+initial_velocity_max = 350.0
+gravity = Vector3(0, 300, 0)
+scale_min = 2.0
+scale_max = 5.0
+scale_curve = SubResource("CurveTexture_nnmq4")
+
+[node name="box" type="Node2D" unique_id=1342213207]
 script = ExtResource("1_qoqbc")
 
-[node name="Fundo1" type="Sprite2D" parent="." unique_id=241113970]
+[node name="WoodParticles" type="GPUParticles2D" parent="." unique_id=908350909]
+emitting = false
+texture = ExtResource("2_v47vr")
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.8
+process_material = SubResource("ParticleProcessMaterial_wco6n")
+
+[node name="Pieces" type="Node2D" parent="." unique_id=327993416]
+
+[node name="Fundo1" type="RigidBody2D" parent="Pieces" unique_id=2127797131]
+collision_mask = 3
+
+[node name="Fundo1" type="Sprite2D" parent="Pieces/Fundo1" unique_id=241113970]
 texture = ExtResource("2_wco6n")
 
-[node name="Fundo2" type="Sprite2D" parent="." unique_id=1453803865]
+[node name="Fundo2" type="RigidBody2D" parent="Pieces" unique_id=1631799921]
+collision_mask = 3
+
+[node name="Fundo2" type="Sprite2D" parent="Pieces/Fundo2" unique_id=1453803865]
 texture = ExtResource("3_y8lwa")
 
-[node name="Fundo" type="Sprite2D" parent="." unique_id=104446056]
+[node name="Piece_Base" type="RigidBody2D" parent="Pieces" unique_id=1462039242]
+collision_mask = 3
+
+[node name="Piece_Base" type="Sprite2D" parent="Pieces/Piece_Base" unique_id=104446056]
 texture = ExtResource("4_fc4e8")
 
-[node name="Topo" type="Sprite2D" parent="." unique_id=187752491]
+[node name="Topo" type="RigidBody2D" parent="Pieces" unique_id=1130785442]
+collision_mask = 3
+
+[node name="Topo" type="Sprite2D" parent="Pieces/Topo" unique_id=187752491]
 texture = ExtResource("5_t0bae")
 
-[node name="Lateral" type="Sprite2D" parent="." unique_id=821579497]
+[node name="Lateral" type="RigidBody2D" parent="Pieces" unique_id=816269159]
+collision_mask = 3
+
+[node name="Lateral" type="Sprite2D" parent="Pieces/Lateral" unique_id=821579497]
 texture = ExtResource("6_3u5ou")
 
-[node name="Frente1" type="Sprite2D" parent="." unique_id=683193087]
+[node name="Frente1" type="RigidBody2D" parent="Pieces" unique_id=1326121515]
+collision_mask = 3
+
+[node name="Frente1" type="Sprite2D" parent="Pieces/Frente1" unique_id=683193087]
 texture = ExtResource("7_ck5ti")
 
-[node name="Frente2" type="Sprite2D" parent="." unique_id=157066717]
+[node name="Frente2" type="RigidBody2D" parent="Pieces" unique_id=834695435]
+collision_mask = 3
+
+[node name="Frente2" type="Sprite2D" parent="Pieces/Frente2" unique_id=157066717]
 texture = ExtResource("8_sp2yk")
 
-[node name="Frente3" type="Sprite2D" parent="." unique_id=1434127712]
+[node name="Frente3" type="RigidBody2D" parent="Pieces" unique_id=391092692]
+collision_mask = 3
+
+[node name="Frente3" type="Sprite2D" parent="Pieces/Frente3" unique_id=1434127712]
 texture = ExtResource("9_sundq")
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=908350909]
+[node name="FlashTimer" type="Timer" parent="." unique_id=810222799]
